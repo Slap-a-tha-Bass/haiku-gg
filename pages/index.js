@@ -1,8 +1,60 @@
-import Head from 'next/head'
-import Image from 'next/image'
-import styles from '../styles/Home.module.css'
-
+import Head from "next/head";
+import Image from "next/image";
+import styles from "../styles/Home.module.css";
+import { syllable } from "syllable";
+import { useState } from "react";
 export default function Home() {
+  const [words, setWords] = useState([]);
+  const [syllables, setSyllables] = useState([]);
+  const [text, setText] = useState("");
+
+  // create a function that pushes the text into the words array
+  const handleClick = (e) => {
+    e.preventDefault();
+    setText(e.target.value);
+    words.push(text);
+    syllables.push(syllable(text));
+    setSyllables([...syllables], syllable(text));
+    setWords([...words], { text, syllables: syllable(text) });
+  };
+  console.log(words, "words");
+  console.log(syllables, "syllables");
+  // creat a function that returns the total number of syllables
+  const totalSyllables = syllables.reduce((acc, curr) => {
+    return acc + curr;
+  }, 0);
+  // create a function that returns the words once they have reached 5 syllables
+  const wordsWithOneSyllable = words.filter((word) => syllable(word) === 1);
+  const wordsWithTwoSyllables = words.filter((word) => syllable(word) === 2);
+  const wordsWithThreeSyllables = words.filter((word) => syllable(word) === 3);
+  const wordsWithFourSyllables = words.filter((word) => syllable(word) === 4);
+  const wordsWithFiveSyllables = words.filter((word) => syllable(word) >= 5);
+  const wordsWithSixSyllables = words.filter((word) => syllable(word) === 6);
+  const wordsWithSevenSyllables = words.filter((word) => syllable(word) === 7);
+  console.log(wordsWithOneSyllable, "wordsWithOneSyllable");
+  console.log(wordsWithTwoSyllables, "wordsWithTwoSyllables");
+  console.log(wordsWithThreeSyllables, "wordsWithThreeSyllables");
+  console.log(wordsWithFourSyllables, "wordsWithFourSyllables");
+  console.log(wordsWithFiveSyllables, "wordsWithFiveSyllables");
+  console.log(totalSyllables, "total syllables");
+  // create a function that combines the words to add up to 5 syllable count
+  const totalSyllableCount = words.reduce((acc, curr) => {
+    return acc + syllable(curr);
+  }
+  , 0);
+  const combineWords = words.reduce((acc, curr) => {
+    return acc + curr;
+  }
+  , "");
+  let combinedWords = [];
+  if (totalSyllableCount === 5) {
+    combinedWords.push(combineWords);
+    console.log("WE MADE IT TO 5 SYLLABLES");
+  }
+  if (totalSyllableCount === 6) {
+    alert("Oops you need 5 syllables");
+  }
+  console.log(combineWords, "combineWords");
   return (
     <div className={styles.container}>
       <Head>
@@ -12,58 +64,29 @@ export default function Home() {
       </Head>
 
       <main className={styles.main}>
-        <h1 className={styles.title}>
-          Welcome to <a href="https://nextjs.org">Next.js!</a>
-        </h1>
-
-        <p className={styles.description}>
-          Get started by editing{' '}
-          <code className={styles.code}>pages/index.js</code>
-        </p>
-
-        <div className={styles.grid}>
-          <a href="https://nextjs.org/docs" className={styles.card}>
-            <h2>Documentation &rarr;</h2>
-            <p>Find in-depth information about Next.js features and API.</p>
-          </a>
-
-          <a href="https://nextjs.org/learn" className={styles.card}>
-            <h2>Learn &rarr;</h2>
-            <p>Learn about Next.js in an interactive course with quizzes!</p>
-          </a>
-
-          <a
-            href="https://github.com/vercel/next.js/tree/canary/examples"
-            className={styles.card}
-          >
-            <h2>Examples &rarr;</h2>
-            <p>Discover and deploy boilerplate example Next.js projects.</p>
-          </a>
-
-          <a
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-          >
-            <h2>Deploy &rarr;</h2>
-            <p>
-              Instantly deploy your Next.js site to a public URL with Vercel.
-            </p>
-          </a>
-        </div>
+        <h1>Haiku gg</h1>
+        <form>
+          <input
+            type="text"
+            value={text}
+            onChange={(e) => setText(e.target.value)}
+          />
+          <button onClick={handleClick}>Submit</button>
+          {words.map((word, index) => {
+            return (
+              <div key={index}>
+                <p>
+                  {word} + {syllable(word)}
+                </p>
+              </div>
+            );
+          })}
+        </form>
       </main>
 
       <footer className={styles.footer}>
-        <a
-          href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Powered by{' '}
-          <span className={styles.logo}>
-            <Image src="/vercel.svg" alt="Vercel Logo" width={72} height={16} />
-          </span>
-        </a>
+        <p>Copyright © 2022</p>
       </footer>
     </div>
-  )
+  );
 }
